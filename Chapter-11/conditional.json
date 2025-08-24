@@ -1,0 +1,79 @@
+{
+    "$schema": "https://json-schema.org/draft-07/schema#",
+    "title": "Magic Item Schema",
+    "description": "A schema definition for a Magic Item data object.",
+    "type": "object",
+    "properties": {
+        "name": {
+            "type": "string"
+        },
+        "type": {
+            "type": "string"
+        },
+        "rarity": {
+            "type": "string",
+            "enum": [
+                "common",
+                "uncommon",
+                "rare",
+                "very rare",
+                "legendary"
+            ]
+        },
+        "attunement": {
+            "type": "boolean",
+            "_comment_attunement": "Indicates whether the item requires attunement"
+        },
+        "charges": {
+            "type": "integer",
+            "minimum": 0,
+            "_comment_charges": "Number of charges the item has, if applicable"
+        },
+        "description": {
+            "type": "string"
+        }
+    },
+    "required": [
+        "name",
+        "type",
+        "rarity",
+        "attunement"
+    ],
+    "_comment_conditional": "If the item is rare or higher, it requires attunement and must have charges. Otherwise, it doesn't require attunement and cannot have charges.",
+    "if": {
+        "properties": {
+            "rarity": {
+                "enum": [
+                    "rare",
+                    "very rare",
+                    "legendary"
+                ]
+            }
+        }
+    },
+    "then": {
+        "properties": {
+            "attunement": {
+                "const": true
+            },
+            "charges": {
+                "minimum": 1
+            }
+        },
+        "required": [
+            "charges"
+        ]
+    },
+    "else": {
+        "properties": {
+            "attunement": {
+                "const": false
+            }
+        },
+        "not": {
+            "required": [
+                "charges"
+            ]
+        }
+    }
+}

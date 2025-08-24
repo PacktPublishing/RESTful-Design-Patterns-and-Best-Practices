@@ -1,0 +1,120 @@
+{
+    "$schema": "https://json-schema.org/draft-07/schema#",
+    "title": "Magic Item Schema",
+    "description": "A schema definition for a Magic Item data object.",
+    "type": "object",
+    "_comment_allOf": "Ensures the item has basic properties and a description",
+    "allOf": [
+        {
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "rarity": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "name",
+                "type",
+                "rarity"
+            ]
+        },
+        {
+            "properties": {
+                "description": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "description"
+            ]
+        }
+    ],
+    "properties": {
+        "attunement": {
+            "type": "boolean"
+        },
+        "creator": {
+            "_comment_creator": "Creator cannot be Unknown, Nameless, or Anonymous",
+            "type": "string",
+            "not": {
+                "enum": [
+                    "Unknown",
+                    "Nameless",
+                    "Anonymous"
+                ]
+            }
+        },
+        "effects": {
+            "_comment_effects": "Effect is a list of values that can be either strings or objects with name and duration",
+            "type": "array",
+            "items": {
+                "anyOf": [
+                    {
+                        "type": "string"
+                    },
+                    {
+                        "type": "object",
+                        "properties": {
+                            "duration": {
+                                "type": "string"
+                            },
+                            "name": {
+                                "type": "string"
+                            }
+                        },
+                        "required": [
+                            "name",
+                            "duration"
+                        ]
+                    }
+                ]
+            }
+        },
+        "usage": {
+            "_comment_usage": "Item must have either charges with recharge or uses per time period",
+            "type": "object",
+            "oneOf": [
+                {
+                    "properties": {
+                        "charges": {
+                            "minimum": 1,
+                            "type": "integer"
+                        },
+                        "recharge": {
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "charges",
+                        "recharge"
+                    ]
+                },
+                {
+                    "properties": {
+                        "per": {
+                            "enum": [
+                                "day",
+                                "week",
+                                "year"
+                            ],
+                            "type": "string"
+                        },
+                        "uses": {
+                            "minimum": 1,
+                            "type": "integer"
+                        }
+                    },
+                    "required": [
+                        "uses",
+                        "per"
+                    ]
+                }
+            ]
+        }
+    }
+}

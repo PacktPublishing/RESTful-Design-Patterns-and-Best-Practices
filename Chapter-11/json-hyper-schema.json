@@ -1,0 +1,123 @@
+{
+    "$schema": "http://json-schema.org/draft-07/hyper-schema#",
+    "$id": "https://magic-store.com/magic-item-hyper-schema.json",
+    "title": "Magic Item Hyper-Schema",
+    "type": "object",
+    "_comment_base": "The base URI for all relative URIs in the schema",
+    "base": "https://api.magic-store.com/magic-items/",
+    "properties": {
+        "id": {
+            "type": "integer"
+        },
+        "name": {
+            "type": "string"
+        },
+        "type": {
+            "type": "string",
+            "enum": [
+                "weapon",
+                "armor",
+                "potion",
+                "scroll",
+                "wand",
+                "ring"
+            ]
+        },
+        "rarity": {
+            "type": "string",
+            "enum": [
+                "common",
+                "uncommon",
+                "rare",
+                "very rare",
+                "legendary"
+            ]
+        },
+        "attunement": {
+            "type": "boolean"
+        },
+        "description": {
+            "type": "string"
+        },
+        "effects": {
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/effect"
+            },
+            "links": [
+                {
+                    "rel": "add",
+                    "href": "{id}/effects",
+                    "method": "POST",
+                    "schema": {
+                        "$ref": "#/definitions/effect"
+                    },
+                    "_comment_add_effect": "Link for adding a new effect to the item"
+                }
+            ]
+        }
+    },
+    "required": [
+        "id",
+        "name",
+        "type",
+        "rarity",
+        "description"
+    ],
+    "links": [
+        {
+            "rel": "self",
+            "href": "{id}",
+            "_comment_self": "Link to the item itself"
+        },
+        {
+            "rel": "collection",
+            "href": "/",
+            "_comment_collection": "Link to the collection of all magic items"
+        },
+        {
+            "rel": "update",
+            "href": "{id}",
+            "method": "PUT",
+            "schema": {
+                "$ref": "#"
+            },
+            "_comment_update": "Link for updating the item"
+        },
+        {
+            "rel": "delete",
+            "href": "{id}",
+            "method": "DELETE",
+            "_comment_delete": "Link for deleting the item"
+        },
+        {
+            "rel": "creator",
+            "href": "/creators/{creator}",
+            "hrefSchema": {
+                "properties": {
+                    "creator": {
+                        "type": "string"
+                    }
+                }
+            },
+            "_comment_creator": "Link to the creator of the item, if known"
+        }
+    ],
+    "definitions": {
+        "effect": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "name",
+                "description"
+            ]
+        }
+    }
+}

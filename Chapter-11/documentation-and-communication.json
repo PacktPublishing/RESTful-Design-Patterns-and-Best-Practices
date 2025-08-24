@@ -1,0 +1,40 @@
+{
+    "$schema": "https://json-schema.org/draft-07/schema#",
+    "$id": "https://magic-store.com/item.schema.json",
+    "title": "magicItem",
+    "description": "A product from the magic items catalog",
+    "type": "object",
+    "properties": {
+        "itemId": {
+            "type": "string",
+            "description": "The unique identifier for an item",
+            "examples": [
+                "12345"
+            ],
+            "_comment": "Refer to the item ID guidelines at https://example.com/docs/item-id"
+        },
+        "itemName": {
+            "type": "string",
+            "description": "The name of the magic item",
+            "minLength": 1,
+            "examples": [
+                "Staff of Power"
+            ],
+            "_comment": "The name of the item must be at least 1 character long."
+        },
+        "price": {
+            "type": "integer",
+            "description": "The price of the item in gold coins",
+            "minimum": 1,
+            "examples": [
+                19
+            ],
+            "_comment": "Prices are in gold coins, as per the standard currency in the magic items catalog, refer to https://example.com/docs/currency. The minimum price is 1 gold coin."
+        }
+    },
+    "required": [
+        "itemId",
+        "itemName",
+        "price"
+    ]
+}

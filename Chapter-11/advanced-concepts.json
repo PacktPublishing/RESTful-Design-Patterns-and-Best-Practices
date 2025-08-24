@@ -1,0 +1,183 @@
+{
+    "$schema": "https://json-schema.org/draft-07/schema#",
+    "title": "Magic Item Schema",
+    "description": "A schema definition for a Magic Item data object.",
+    "_comment": "This schema defines the structure of a magic item with various advanced concepts",
+    "type": "object",
+    "_comment_definitions": "Definitions for reusable parts of the schema",
+    "definitions": {
+        "effect": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "duration": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "name",
+                "duration"
+            ]
+        }
+    },
+    "properties": {
+        "name": {
+            "type": "string"
+        },
+        "type": {
+            "type": "string",
+            "enum": [
+                "weapon",
+                "armor",
+                "potion",
+                "scroll",
+                "wand",
+                "ring"
+            ]
+        },
+        "rarity": {
+            "type": "string",
+            "enum": [
+                "common",
+                "uncommon",
+                "rare",
+                "very rare",
+                "legendary"
+            ]
+        },
+        "attunement": {
+            "type": "boolean"
+        },
+        "description": {
+            "type": "string"
+        },
+        "effects": {
+            "_comment_effects": "Effects can be either strings or objects with name and duration",
+            "type": "array",
+            "items": {
+                "anyOf": [
+                    {
+                        "type": "string"
+                    },
+                    {
+                        "$ref": "#/definitions/effect"
+                    }
+                ]
+            }
+        },
+        "usage": {
+            "_comment_usage": "Usage properties for items with charges or uses",
+            "type": "object",
+            "oneOf": [
+                {
+                    "properties": {
+                        "charges": {
+                            "type": "integer",
+                            "minimum": 1
+                        },
+                        "recharge": {
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "charges",
+                        "recharge"
+                    ]
+                },
+                {
+                    "properties": {
+                        "uses": {
+                            "type": "integer",
+                            "minimum": 1
+                        },
+                        "per": {
+                            "type": "string",
+                            "enum": [
+                                "day",
+                                "week",
+                                "year"
+                            ]
+                        }
+                    },
+                    "required": [
+                        "uses",
+                        "per"
+                    ]
+                }
+            ]
+        },
+        "creator": {
+            "_comment_creator": "Creator cannot be Unknown, Nameless, or Anonymous",
+            "type": "string",
+            "not": {
+                "enum": [
+                    "Unknown",
+                    "Nameless",
+                    "Anonymous"
+                ]
+            }
+        }
+    },
+    "required": [
+        "name",
+        "type",
+        "rarity",
+        "description"
+    ],
+    "_comment_conditional": "Rare or higher items require attunement, and potions can't have usage properties",
+    "allOf": [
+        {
+            "if": {
+                "properties": {
+                    "rarity": {
+                        "enum": [
+                            "rare",
+                            "very rare",
+                            "legendary"
+                        ]
+                    }
+                }
+            },
+            "then": {
+                "properties": {
+                    "attunement": {
+                        "const": true
+                    }
+                },
+                "required": [
+                    "attunement"
+                ]
+            },
+            "else": {
+                "properties": {
+                    "attunement": {
+                        "const": false
+                    }
+                }
+            }
+        },
+        {
+            "if": {
+                "properties": {
+                    "type": {
+                        "const": "potion"
+                    }
+                }
+            },
+            "then": {
+                "properties": {
+                    "usage": {
+                        "type": "null"
+                    }
+                },
+                "not": {
+                    "required": [
+                        "usage"
+                    ]
+                }
+            }
+        }
+    ]
+}

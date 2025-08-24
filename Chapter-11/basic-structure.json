@@ -1,0 +1,105 @@
+{
+    "$schema": "https://json-schema.org/draft-07/schema#",
+    "_comment": "JSON does not support comments, so we will be using _comment with parameter name key to simulate them",
+    "title": "Magic Item Schema",
+    "_comment_title": "Human-readable title for the schema",
+    "description": "A schema definition for a Magic Item data object.",
+    "_comment_description": "Detailed description of the schema's purpose",
+    "type": "object",
+    "_comment_type": "Specifies that the schema is for an object",
+    "_comment_properties": "Defines the properties of the object",
+    "properties": {
+        "name": {
+            "_comment_name": "Human-readable name for the property",
+            "type": "string",
+            "description": "The name of the magic item",
+            "minLength": 1,
+            "maxLength": 100,
+            "_comment_minLength": "Minimum length of the property",
+            "_comment_maxLength": "Maximum length of the property"
+        },
+        "type": {
+            "type": "string",
+            "description": "The type of magic item",
+            "enum": [
+                "weapon",
+                "armor",
+                "potion",
+                "scroll",
+                "wand",
+                "ring"
+            ],
+            "_comment_enum": "Specifies a list of valid values for the property"
+        },
+        "rarity": {
+            "type": "string",
+            "description": "The rarity of the item",
+            "enum": [
+                "common",
+                "uncommon",
+                "rare",
+                "very rare",
+                "legendary"
+            ]
+        },
+        "attunement": {
+            "type": "boolean",
+            "description": "Whether the item requires attunement"
+        },
+        "description": {
+            "type": "string",
+            "description": "A description of the item's appearance and effects"
+        },
+        "charges": {
+            "type": "integer",
+            "description": "The number of charges the item has, if applicable",
+            "minimum": 0,
+            "maximum": 100,
+            "_comment_minimum": "Minimum value for the property",
+            "_comment_maximum": "Maximum value for the property"
+        },
+        "weight": {
+            "type": "number",
+            "description": "The weight of the item in pounds",
+            "minimum": 0,
+            "_comment_minimum": "Ensures the weight is not negative"
+        },
+        "value": {
+            "type": "integer",
+            "description": "The value of the item in gold pieces",
+            "minimum": 0
+        },
+        "effects": {
+            "type": "array",
+            "_comment_array": "Specifies that this property is an array",
+            "description": "List of magical effects",
+            "items": {
+                "_comment_items": "Defines the schema for each item in the array",
+                "type": "string"
+            },
+            "minItems": 1,
+            "_comment_minItems": "Ensures the array has at least one item"
+        },
+        "creator": {
+            "type": "string",
+            "description": "The creator of the magic item",
+            "pattern": "^[A-Z][a-z]+ [A-Z][a-z]+$",
+            "_comment_pattern": "Regular expression pattern for the property. Enforces first Last name format.)"
+        },
+        "created_date": {
+            "type": "string",
+            "description": "The date the item was created",
+            "format": "date",
+            "_comment_format": "Specifies the format of the property"
+        }
+    },
+    "required": [
+        "name",
+        "type",
+        "rarity",
+        "description"
+    ],
+    "_comment_required": "Specifies the required properties for the object",
+    "additionalProperties": false,
+    "_comment_additionalProperties": "Ensures that only properties defined in the schema are allowed"
+}
